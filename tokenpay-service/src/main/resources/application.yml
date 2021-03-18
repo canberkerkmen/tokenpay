@@ -1,0 +1,69 @@
+server:
+  port: 4567
+
+management:
+  server:
+    port: 4567
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /management
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: tokenpay-service
+  jpa:
+    database: postgresql
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: admin
+    password: admin123
+  mvc:
+    converters:
+      preferred-json-mapper: gson
+
+
+info:
+  status: OK
+  version: ${VERSION:1}
+  env: local
+
+security:
+  jwt:
+    token:
+      secret-key: secret-key
+      expire-length: 30000000 # 500 minutes duration by default: 5 minutes * 60 seconds * 1000 miliseconds
+
+external-tokenpay-service:
+  url: https://api-gateway.tokenpay.com.tr/
+  api-key: key-1
+  secret-key: FooBar123!
+  auth-version: V1
+
+UserController:
+  getall: Get all users
+  signin: Authenticates user and returns its JWT token.
+  signup: Creates user and returns its JWT token
+  delete: Deletes specific user by username
+  search: Returns specific user by username
+  me: Returns current user's data
+
+ProductController:
+  add: Creates product
+  getall: Get all products
+
+OrderController:
+  add: Creates order for token user
+  edit: Edit order for token user
+  getall: Get all orders for token user

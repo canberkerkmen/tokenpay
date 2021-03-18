@@ -1,0 +1,41 @@
+version: "3.5"
+services:
+  spring-service:
+    environment:
+      - SPRING_PROFILES_ACTIVE=${ENV}
+      - ENV=${ENV}
+      - VERSION=${VERSION}
+    image: canberkerkmen/tokenpay-service:${VERSION}
+    stop_grace_period: 3s
+    ports:
+      - 8081:4567
+    healthcheck:
+      test:            ["CMD", "wget", "http://localhost:4567/management/info", "-O", "-"]
+      interval:        10s
+      timeout:         10s
+      retries:         10
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: stop-first
+        failure_action: rollback
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: "udp://${LOGSTASH_URL}:12201"
+        tag: "tokenpay-service,${ENV}"

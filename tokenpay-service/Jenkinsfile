@@ -1,0 +1,57 @@
+pipeline {
+    agent none
+    environment {
+        appName = 'tokenpay-service'
+        QA = 'qa'
+        repo = 'canberkerkmen'
+        logstashUrl = ''
+    }
+    stages {
+        stage('Build And Test Stage') {
+            agent {
+                label 'docker-slave'
+            }
+            stages {
+                stage('Compile') {
+                    steps {
+                        sh './gradlew clean compileJava'
+                    }
+                }
+                stage('bootJar') {
+                    steps {
+                        script {
+                            sh './gradlew bootJar'
+                            stash includes: 'build/libs/spring-service-1.0-SNAPSHOT.jar', name: 'tokenpay-service'
+                        }
+                    }
+                }
+            }
+        }
+        stage ('Docker Build') {
+            agent {
+                label 'docker-slave'
+            }
+            steps {
+                script {
+                    unstash 'tokenpay-service'
+                    withCredentials([usernamePassword(credentialsId: 'hub', passwordVariable: 'password', usernameVariable: 'tokenPayUser')]) {
+                        sh """
+                            docker build -f Dockerfile -t ${repo}/${env.appName}:$BUILD_NUMBER .
+                            docker login -u $tokenPayUser -p $password
+                            docker push ${repo}/${env.appName}:$BUILD_NUMBER
+                            docker rmi ${repo}/${env.appName}:$BUILD_NUMBER
+                        """
+                    }
+                }
+            }
+        }
+        stage('QA Deployment') {
+            agent {
+                label 'masterQA'
+            }
+            steps {
+                sh "env LOGSTASH_URL=${env.logstashUrl} VERSION=$BUILD_NUMBER ENV=${env.QA} docker stack deploy -c docker-compose-stack.yml --prune --with-registry-auth ${appName}"
+            }
+        }
+    }
+}
