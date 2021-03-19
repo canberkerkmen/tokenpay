@@ -31,7 +31,7 @@ dependencies {
 }
 
 bootJar {
-    mainClassName = "com.erkmen.tokenpay.SpringServiceApplication"
+    mainClassName = "com.erkmen.TokenpayApplication"
 }
 
 test {
