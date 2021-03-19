@@ -2,6 +2,7 @@ package com.erkmen.domain;
 
 import com.erkmen.domain.enums.OrderStatus;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "\"Order\"")
+@EqualsAndHashCode(callSuper = false)
 public class Order extends BaseEntity {
 
     @Column

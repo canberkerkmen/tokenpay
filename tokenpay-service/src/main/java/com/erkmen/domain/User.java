@@ -2,6 +2,7 @@ package com.erkmen.domain;
 
 import com.erkmen.domain.enums.Role;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "\"User\"")
+@EqualsAndHashCode(callSuper = false)
 public class User extends BaseEntity {
 
     @Size(min = 4, max = 255, message = "Minimum username length: 4 characters")

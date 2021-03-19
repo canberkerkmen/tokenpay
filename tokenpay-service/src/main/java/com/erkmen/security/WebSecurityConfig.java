@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/products/getAll").permitAll()
                 .antMatchers("/users/signin").permitAll()//
                 .antMatchers("/users/signup").permitAll()//
+                // Disallow everything else..
                 .anyRequest().authenticated();
 
         http.exceptionHandling().accessDeniedPage("/login");
@@ -46,11 +48,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/v2/api-docs")//
                 .antMatchers("/swagger-resources/**")//
-                .antMatchers("/favicon.ico")//
-                .antMatchers("/configuration/**")//
+                .antMatchers("/swagger-ui.html")//
                 .antMatchers("/management/**")//
-                .antMatchers("/swagger-ui/**")
-
+                .antMatchers("/webjars/**")//
+                .antMatchers("/public")
                 .and()
                 .ignoring();
     }

@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @Data
 @Entity
 @Table(name = "Product")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true,callSuper = false)
 public class Product extends BaseEntity {
 
     @Id

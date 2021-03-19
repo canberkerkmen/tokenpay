@@ -1,6 +1,7 @@
 server:
   port: 4567
 
+
 management:
   server:
     port: 4567
@@ -29,10 +30,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: admin
     password: admin123
-  mvc:
-    converters:
-      preferred-json-mapper: gson
-
 
 info:
   status: OK

@@ -94,7 +94,7 @@ public class DefaultApplicationFactory implements ApplicationFactory {
     @Override
     public Order editOrderElement(OrderElementInfoDTO orderElementInfoDTO, Product product, User user, Order order) {
 
-        if (orderElementInfoDTO.getQuantity().equals(0)) {
+        if (orderElementInfoDTO.getQuantity().equals(0d)) {
             order.getOrderElementList().removeIf(orderElement -> orderElement.getProduct().equals(product));
         } else {
             order.getOrderElementList().stream()

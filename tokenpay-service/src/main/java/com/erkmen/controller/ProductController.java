@@ -6,6 +6,7 @@ import com.erkmen.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "${ProductController.add}")
     public void add(@RequestBody @Valid ProductInfoDTO productInfoDTO) {
         productService.add(productInfoDTO);

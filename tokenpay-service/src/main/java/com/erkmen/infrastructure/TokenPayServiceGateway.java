@@ -26,7 +26,6 @@ import java.util.concurrent.CompletableFuture;
 public class TokenPayServiceGateway implements TokenPayService {
 
     private final RestTemplate restTemplate;
-    private final TokenPayMapper tokenPayMapper;
     private final TokenPayServiceGatewayConfiguration tokenPayServiceGatewayConfiguration;
     private final Gson gson;
 
